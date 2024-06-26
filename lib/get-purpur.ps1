@@ -2,16 +2,18 @@ param (
     [string]$Version = "1.21"
 )
 
-# Define the base URL
+$outputDir = Join-Path -Path $PSScriptRoot -ChildPath "../data"
+if (-not (Test-Path -Path $outputDir))
+{
+    New-Item -ItemType Directory -Path $outputDir
+}
+
 $baseUrl = "https://api.purpurmc.org/v2/purpur"
 
-# Construct the URL based on the provided version
 $jsonUrl = "$baseUrl/$Version"
 
-# Define the output file path using the script's directory
-$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "purpur/$Version.json"
+$outputFile = Join-Path -Path $outputDir -ChildPath "purpur/$Version.json"
 
-# Download the JSON content with error handling
 Try
 {
     $jsonContent = Invoke-RestMethod -Uri $jsonUrl
@@ -29,13 +31,10 @@ Catch
     exit 1
 }
 
-# Extract the latest build
 $latestBuild = $jsonContent.builds.latest
 
-# Extract all builds
 $allBuilds = $jsonContent.builds.all
 
-# Prepare the JSON structure
 $outputObject = @{
     latest = @{
         version = "$Version-$latestBuild"
@@ -44,7 +43,6 @@ $outputObject = @{
     versions = @()
 }
 
-# Populate the versions array
 foreach ($build in $allBuilds) {
     $outputObject.versions += @{
         version = "$Version-$build"
@@ -52,17 +50,13 @@ foreach ($build in $allBuilds) {
     }
 }
 
-# Convert the object to JSON format
 $outputJson = $outputObject | ConvertTo-Json -Depth 3
 
-# Create the directory if it doesn't exist
-$purpurDir = Join-Path -Path $PSScriptRoot -ChildPath "purpur"
+$purpurDir = Join-Path -Path $outputDir -ChildPath "purpur"
 if (-not (Test-Path -Path $purpurDir)) {
     New-Item -ItemType Directory -Path $purpurDir
 }
 
-# Write the JSON content to the output file
 Set-Content -Path $outputFile -Value $outputJson
 
-# Output a message indicating the script has completed
 Write-Host "Processed builds for version $Version and written to $outputFile"

@@ -1,7 +1,12 @@
-# Define the path for version.json and auto_version.ps1
-$versionFilePath = Join-Path -Path $PSScriptRoot -ChildPath "version.json"
+$outputDir = Join-Path -Path $PSScriptRoot -ChildPath "../data"
+if (-not (Test-Path -Path $outputDir))
+{
+    New-Item -ItemType Directory -Path $outputDir
+}
+
+$versionFilePath = Join-Path -Path $outputDir -ChildPath "minecraft_version.json"
 $autoVersionScript = Join-Path -Path $PSScriptRoot -ChildPath "auto_version.ps1"
-$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "spigot.json"
+$outputFile = Join-Path -Path $outputDir -ChildPath "spigot.json"
 
 # Function to load version.json
 function Load-VersionFile {

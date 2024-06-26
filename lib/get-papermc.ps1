@@ -12,11 +12,17 @@ switch ($proj) {
     }
 }
 
+$outputDir = Join-Path -Path $PSScriptRoot -ChildPath "../data"
+if (-not (Test-Path -Path $outputDir))
+{
+    New-Item -ItemType Directory -Path $outputDir
+}
+
 $baseUrl = "https://api.papermc.io/v2/projects/$proj/versions"
 
 $jsonUrl = "$baseUrl/$Version/builds"
 
-$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "$proj/$Version.json"
+$outputFile = Join-Path -Path $outputDir -ChildPath "$proj/$Version.json"
 
 Try
 {
@@ -57,7 +63,7 @@ foreach ($build in $allBuilds)
 
 $outputJson = $outputObject | ConvertTo-Json -Depth 3
 
-$paperDir = Join-Path -Path $PSScriptRoot -ChildPath $proj
+$paperDir = Join-Path -Path $outputDir -ChildPath $proj
 if (-not (Test-Path -Path $paperDir))
 {
     New-Item -ItemType Directory -Path $paperDir
