@@ -52,6 +52,7 @@ switch ($proj) {
     }
     "paper" { Get "https://api.papermc.io/v2/projects/$proj" }
     "folia" { Get "https://api.papermc.io/v2/projects/$proj" }
+    "shreddedpaper" { Get "https://api.multipaper.io/v2/projects/$proj" }
     "spigot" { 
         Get-Spigot
     }
