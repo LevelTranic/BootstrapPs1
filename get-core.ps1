@@ -27,23 +27,19 @@ function Get {
         exit 1
     }
 
-    if ($proj -eq "paper" -or $proj -eq "folia") {
-        $getPapermcScript = Join-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath "lib") -ChildPath "get-papermc.ps1"
-    } else {
-        $getPapermcScript = Join-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath "lib") -ChildPath "get-$proj.ps1"
-    }
+    $getPapermcScript = Join-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath "lib") -ChildPath "get-bukkit.ps1"
 
     foreach ($version in $versions) {
         Write-Host "Processing version $version..."
-        & $getPapermcScript $version $proj
+        & $getPapermcScript $proj $version
     }
 
     Write-Host "All versions have been processed."
 }
 
 function Get-Spigot {
-    $getSpigotScript = Join-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath "lib") -ChildPath "get-spigot.ps1"
-    & $getSpigotScript
+    $getSpigotScript = Join-Path -Path (Join-Path -Path $PSScriptRoot -ChildPath "lib") -ChildPath "get-bukkit.ps1"
+    & $getSpigotScript $proj
 }
 
 switch ($proj) {
