@@ -56,7 +56,7 @@ switch ($proj) {
         Get "https://api.luminolmc.com/v2/projects/luminol"
     }
     default {
-        Write-Error "proj must be either 'paper', 'folia', 'spigot'."
+        Write-Error "Unknown Minecraft Server: $proj"
         exit 1
     }
 }

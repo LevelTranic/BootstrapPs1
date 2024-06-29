@@ -31,7 +31,7 @@ switch ($proj) {
         $jsonUrl = "$baseUrl/$Version/builds" 
     }
     default {
-        Write-Error "proj must be either 'paper', 'folia', 'spigot'."
+        Write-Error "Unknown Minecraft Server: $proj"
         exit 1
     }
 }
@@ -63,7 +63,7 @@ if (-not $versionData) {
     $versionData = LoadVersionFile
 
     if (-not $versionData) {
-        Write-Host "Error: auto_version.json not found after running auto_version.ps1."
+        Write-Error "auto_version.json not found after running auto_version.ps1."
         exit 1
     }
 }
@@ -100,10 +100,10 @@ function Get-Bukkit {
     }
     Catch {
         if ($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Error $_.ErrorDetails.Message
         }
         else {
-            Write-Host $_
+            Write-Error $_
         }
         exit 1
     }
